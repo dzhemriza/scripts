@@ -1,0 +1,10 @@
+ido.last
+semanticdb
+
+# Temp files
+.\#*
+~
+*~
+tramp
+\#*\#
+.tramp_history
