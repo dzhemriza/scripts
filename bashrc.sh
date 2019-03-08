@@ -20,10 +20,11 @@ alias ew="$EMACS &"
 # Java stuff
 
 # Make sure you have the following symlinks
-JAVA_HOME=~/apps/jdk
-M2_HOME=~/apps/maven
+JAVA_HOME=~/apps/default-jdk
+#M2_HOME=~/apps/maven
 
 export JAVA_HOME
-export M2_HOME
+#export M2_HOME
 
-export PATH=$JAVA_HOME/bin:$M2_HOME/bin:$PATH
+export PATH=$JAVA_HOME/bin:$PATH
+#export PATH=$M2_HOME/bin:$PATH
