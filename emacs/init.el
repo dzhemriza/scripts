@@ -18,7 +18,7 @@
 (blink-cursor-mode 0)
 
 ;;; Font size
-(set-face-attribute 'default nil :height 130)
+(set-face-attribute 'default nil :height 90)
 
 ;; Enable sub-word mode for movement in emacs
 (global-subword-mode 1)

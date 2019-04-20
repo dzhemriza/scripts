@@ -1,0 +1,12 @@
+# Creation
+dd if=/dev/urandom of=~/soup.img bs=1M count=1024
+cryptsetup -y luksFormat ~/soup.img
+sudo cryptsetup luksOpen ~/soup.img soup-device
+sudo mkfs.ext4 -j /dev/mapper/soup-device
+sudo chown <user_name> ./soup/
+
+# Day to day operations
+sudo cryptsetup luksOpen ~/soup.img soup-device
+sudo mount /dev/mapper/soup-device  /home/<user_name>/soup/
+sudo umount /home/<user_name>/soup
+sudo cryptsetup luksClose soup-device
