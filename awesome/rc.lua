@@ -14,6 +14,8 @@ local hotkeys_popup = require("awful.hotkeys_popup").widget
 -- when client with a matching name is opened:
 require("awful.hotkeys_popup.keys")
 
+local vicious = require("vicious")
+
 -- Load Debian menu entries
 local debian = require("debian.menu")
 local has_fdo, freedesktop = pcall(require, "freedesktop")
@@ -123,7 +125,6 @@ else
     })
 end
 
-
 mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
                                      menu = mymainmenu })
 
@@ -131,12 +132,49 @@ mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
 menubar.utils.terminal = terminal -- Set the terminal for applications that require it
 -- }}}
 
--- Keyboard map indicator and switcher
-mykeyboardlayout = awful.widget.keyboardlayout()
+-- Keyboard indicator and switcher
+
+kbdcfg = {}
+kbdcfg.cmd = "setxkbmap"
+kbdcfg.layout = { { "us", "" }, { "bg", "phonetic" } }
+kbdcfg.current = 1  -- us is our default layout
+kbdcfg.widget = wibox.widget.textbox()
+kbdcfg.widget:set_text(" " .. kbdcfg.layout[kbdcfg.current][1] .. " ")
+kbdcfg.switch = function ()
+   kbdcfg.current = kbdcfg.current % #(kbdcfg.layout) + 1
+   local t = kbdcfg.layout[kbdcfg.current]
+   kbdcfg.widget:set_text( " " .. t[1] .. " ")
+   os.execute( kbdcfg.cmd .. " " .. t[1] .. " " .. t[2] )
+   naughty.notify({title = "Keyboard Layout", text = t[1], timeout = 2})
+end
+
+-- Mouse bindings
+kbdcfg.widget:buttons(awful.util.table.join(
+    awful.button({ }, 1, function () kbdcfg.switch() end)
+))
+
+-- Vicious widgets
+
+cpuwidget = awful.widget.graph()
+cpuwidget:set_width(64)
+cpuwidget:set_background_color"#494B4F"
+cpuwidget:set_color{type = "linear", from = {0, 0}, to = {50, 0},
+                    stops = {{0, "#FF5656"}, {0.5, "#88A175"}, {1, "#AECF96"}}}
+
+vicious.register(cpuwidget, vicious.widgets.cpu, "$1", 3)
+
+
+--- Show memory usage in %
+memwidget = wibox.widget.textbox()
+vicious.cache(vicious.widgets.mem)
+vicious.register(memwidget, vicious.widgets.mem, " $1% ", 13)
+
 
 -- {{{ Wibar
 -- Create a textclock widget
 mytextclock = wibox.widget.textclock()
+local calendar = awful.widget.calendar_popup.month()
+calendar:attach(mytextclock, "tr")
 
 -- Create a wibox for each screen and add it
 local taglist_buttons = gears.table.join(
@@ -189,7 +227,8 @@ local function set_wallpaper(s)
         if type(wallpaper) == "function" then
             wallpaper = wallpaper(s)
         end
-        gears.wallpaper.maximized(wallpaper, s, true)
+        gears.wallpaper.set("#000000") --- set the background color to black
+        --gears.wallpaper.maximized(wallpaper, s, true)
     end
 end
 
@@ -234,9 +273,11 @@ awful.screen.connect_for_each_screen(function(s)
         s.mytasklist, -- Middle widget
         { -- Right widgets
             layout = wibox.layout.fixed.horizontal,
-            mykeyboardlayout,
+            memwidget,
+            cpuwidget,
             wibox.widget.systray(),
             mytextclock,
+            kbdcfg.widget,
             s.mylayoutbox,
         },
     }
