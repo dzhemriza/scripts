@@ -18,7 +18,7 @@
 (blink-cursor-mode 0)
 
 ;;; Font size
-(set-face-attribute 'default nil :height 90)
+(set-face-attribute 'default nil :height 120)
 
 ;; Enable sub-word mode for movement in emacs
 (global-subword-mode 1)
@@ -157,7 +157,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(custom-enabled-themes (quote (wombat)))
+ '(custom-enabled-themes (quote (wheatgrass)))
  '(ede-project-directories (quote (file-name-directory load-file-name)))
  )
 ;; '(speedbar-show-unknown-files t))
@@ -202,6 +202,10 @@
 
 (require 'my-utils)
 (require 'tramp)
+
+;; Save emacs session
+(desktop-save-mode 1)
+(desktop-read)
 
 ;; Other custom stuff here
 
