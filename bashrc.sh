@@ -7,8 +7,8 @@
 # . ~/scripts/bashrc.sh
 
 # Alias declarations
-alias ll="ls -la"
-alias l="ls -la"
+alias ll="ls -lah"
+alias l="ls -lah"
 alias grep="grep --color=auto"
 alias vim="vim -X"
 
