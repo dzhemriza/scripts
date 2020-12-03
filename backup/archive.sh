@@ -4,7 +4,9 @@
 # by providing a password
 #
 # Archive format:
-# YYYYMMDD_HHSS_NNN_HOSTNAME_archive.
+# YYYYMMDD_HHMMSS_NNN_HOSTNAME_archive.
+#
+# Requires: tar, gpg
 #
 
 usage()
@@ -19,9 +21,9 @@ if [ "$1" == "" ]; then
     exit 2
 fi
 
-TIMESTAMP="$(date +'%Y%d%m_%H%S_%N')"
+TIMESTAMP="$(date +'%Y%d%m_%H%M%S_%N')"
 
-tar -czv "$@" | gpg -v --cipher-algo AES256 -c -o\
-                    "${TIMESTAMP}_$(hostname)_archive.tar.gz.gpg"
+tar -cv "$@" | gpg -v --cipher-algo AES256 -c -o\
+                   "${TIMESTAMP}_$(hostname)_archive.tar.gz.gpg"
 
 echo "done."

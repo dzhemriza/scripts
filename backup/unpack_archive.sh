@@ -3,6 +3,8 @@
 # Unpacks archive created by archive.sh script uses
 # tar and gpg to extract the contents
 #
+# Requires: tar, gpg
+#
 
 usage()
 {
@@ -21,6 +23,6 @@ if [ "$2" != "" ]; then
     exit 3
 fi
 
-gpg -d "$1" | tar xzvf -
+gpg -d "$1" | tar xvf -
 
 echo "done."
